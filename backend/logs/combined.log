@@ -1546,3 +1546,9 @@
 {"level":"info","message":"::1 - GET /api/cases?page=1&limit=10&sortField=date&sortOrder=desc 304 99.20 ms - - - {}","timestamp":"2025-06-20T08:14:20.318Z"}
 {"level":"info","message":"::1 - GET /api/cases?page=1&limit=10&sortField=date&sortOrder=desc 304 60.86 ms - - - {}","timestamp":"2025-06-20T08:15:26.116Z"}
 {"level":"info","message":"::1 - GET /api/cases?page=1&limit=10&sortField=date&sortOrder=desc 304 141.46 ms - - - {}","timestamp":"2025-06-20T08:15:26.269Z"}
+{"level":"info","message":"Server is running on http://localhost:5000","timestamp":"2025-06-20T09:03:10.464Z"}
+{"level":"info","message":"::1 - GET /api/cases?page=1&limit=10&sortField=date&sortOrder=desc 304 180.23 ms - - - {}","timestamp":"2025-06-20T09:03:16.440Z"}
+{"level":"info","message":"::1 - GET /api/cases?page=1&limit=10&sortField=date&sortOrder=desc 304 114.70 ms - - - {}","timestamp":"2025-06-20T09:03:16.587Z"}
+{"level":"info","message":"::1 - POST /api/cases 201 129.16 ms - 516 - {\"inspectionType\":\"首件\",\"marketType\":\"外銷\",\"customer\":\"CSBdd\",\"department\":\"塑膠射出課\",\"date\":\"2025-06-10\",\"time\":\"17:06\",\"workOrder\":\"\",\"operator\":\"\",\"drawingVersion\":\"\",\"productNumber\":\"5341-2025010032\",\"productName\":\"ryowu\",\"quantity\":\"55\",\"inspector\":\"蔡小函\",\"defectCategory\":\"\",\"defectDescription\":\"\",\"solution\":\"\",\"inspectionHours\":\"33\"}","timestamp":"2025-06-20T09:03:46.578Z"}
+{"level":"info","message":"::1 - GET /api/cases?page=1&limit=10&sortField=date&sortOrder=desc 200 501.86 ms - 5421 - {}","timestamp":"2025-06-20T09:03:47.233Z"}
+{"level":"info","message":"Server is running on http://localhost:5000","timestamp":"2025-06-20T09:07:06.492Z"}
