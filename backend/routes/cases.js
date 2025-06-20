@@ -13,16 +13,25 @@ router.get(
   validateRequest(caseValidations.list),
   async (req, res, next) => {
     try {
-      const { page = 1, limit = 10, ...filters } = req.query;
+      const { page = 1, limit = 10, search, ...filters } = req.query;
       const skip = (page - 1) * limit;
 
       // 構建查詢條件
-      const query = {};
+      let query = {};
       if (filters.inspectionType) query.inspectionType = filters.inspectionType;
       if (filters.marketType) query.marketType = filters.marketType;
       if (filters.department) query.department = filters.department;
-      if (filters.inspector) query.inspector = filters.inspector;
-      if (filters.defectCategory) query.defectCategory = filters.defectCategory;
+
+      if (search) {
+        const searchRegex = new RegExp(search, 'i');
+        query.$or = [
+          { productNumber: searchRegex },
+          { productName: searchRegex },
+          { inspector: searchRegex },
+          { defectCategory: searchRegex },
+        ];
+      }
+
       if (filters.startDate || filters.endDate) {
         query.date = {};
         if (filters.startDate) query.date.$gte = new Date(filters.startDate);

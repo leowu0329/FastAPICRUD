@@ -64,7 +64,7 @@ const CaseList = () => {
       params.append('inspectionType', filters.inspectionType);
     if (filters.marketType) params.append('marketType', filters.marketType);
     if (filters.department) params.append('department', filters.department);
-    if (filters.search) params.append('productName', filters.search);
+    if (filters.search) params.append('search', filters.search);
 
     try {
       const res = await fetch(`/api/cases?${params.toString()}`);
@@ -93,14 +93,23 @@ const CaseList = () => {
     // eslint-disable-next-line
   }, [page]);
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (page !== 1) {
+        setPage(1);
+      } else {
+        fetchCases();
+      }
+    }, 500); // 500ms debounce
+
+    return () => {
+      clearTimeout(handler);
+    };
+    // eslint-disable-next-line
+  }, [filters]);
+
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
-  };
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    setPage(1);
-    fetchCases();
   };
 
   const handleShowModal = (caseItem = null) => {
@@ -214,22 +223,22 @@ const CaseList = () => {
           <h2>案件列表</h2>
         </Col>
         <Col className="text-end">
-          <Button onClick={handleShowModal}>新增案件</Button>
+          <Button onClick={() => handleShowModal()}>新增案件</Button>
         </Col>
       </Row>
 
-      <Form onSubmit={handleSearch} className="mb-3 p-3 border rounded">
+      <div className="mb-3 p-3 border rounded">
         <Row className="g-3">
-          <Col md={2}>
+          <Col md={3}>
             <Form.Control
               type="text"
               name="search"
-              placeholder="搜尋產品名稱"
+              placeholder="搜尋關鍵字..."
               value={filters.search}
               onChange={handleFilterChange}
             />
           </Col>
-          <Col md={2}>
+          <Col md={3}>
             <Form.Select
               name="inspectionType"
               value={filters.inspectionType}
@@ -240,7 +249,7 @@ const CaseList = () => {
               <option value="巡檢">巡檢</option>
             </Form.Select>
           </Col>
-          <Col md={2}>
+          <Col md={3}>
             <Form.Select
               name="marketType"
               value={filters.marketType}
@@ -251,7 +260,7 @@ const CaseList = () => {
               <option value="外銷">外銷</option>
             </Form.Select>
           </Col>
-          <Col md={2}>
+          <Col md={3}>
             <Form.Select
               name="department"
               value={filters.department}
@@ -263,11 +272,8 @@ const CaseList = () => {
               <option value="機械加工課">機械加工課</option>
             </Form.Select>
           </Col>
-          <Col>
-            <Button type="submit">搜尋</Button>
-          </Col>
         </Row>
-      </Form>
+      </div>
 
       {loading ? (
         <div className="text-center">
