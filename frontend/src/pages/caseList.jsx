@@ -50,6 +50,7 @@ const CaseList = () => {
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState(initialState);
   const [formLoading, setFormLoading] = useState(false);
+  const [editingCaseId, setEditingCaseId] = useState(null);
 
   const fetchCases = async () => {
     setLoading(true);
@@ -101,8 +102,17 @@ const CaseList = () => {
     fetchCases();
   };
 
-  const handleShowModal = () => {
-    setForm(initialState);
+  const handleShowModal = (caseItem = null) => {
+    if (caseItem && caseItem._id) {
+      const date = caseItem.date
+        ? new Date(caseItem.date).toISOString().split('T')[0]
+        : '';
+      setForm({ ...initialState, ...caseItem, date });
+      setEditingCaseId(caseItem._id);
+    } else {
+      setForm(initialState);
+      setEditingCaseId(null);
+    }
     setShowModal(true);
   };
   const handleCloseModal = () => setShowModal(false);
@@ -115,9 +125,13 @@ const CaseList = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormLoading(true);
+
+    const url = editingCaseId ? `/api/cases/${editingCaseId}` : '/api/cases';
+    const method = editingCaseId ? 'PUT' : 'POST';
+
     try {
-      const res = await fetch('/api/cases', {
-        method: 'POST',
+      const res = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
@@ -126,23 +140,53 @@ const CaseList = () => {
         handleCloseModal();
         Swal.fire({
           icon: 'success',
-          title: '新增成功!',
+          title: editingCaseId ? '更新成功!' : '新增成功!',
           showConfirmButton: false,
           timer: 1500,
         });
         fetchCases(); // Refresh list
       } else {
-        throw new Error(data.message || '新增失敗');
+        throw new Error(
+          data.message || (editingCaseId ? '更新失敗' : '新增失敗'),
+        );
       }
     } catch (error) {
       Swal.fire({
         icon: 'error',
-        title: '新增失敗',
+        title: editingCaseId ? '更新失敗' : '新增失敗',
         text: error.message,
       });
     } finally {
       setFormLoading(false);
     }
+  };
+
+  const handleDelete = (caseId) => {
+    Swal.fire({
+      title: '確定要刪除嗎？',
+      text: '這個操作無法復原！',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '是的，刪除它！',
+      cancelButtonText: '取消',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await fetch(`/api/cases/${caseId}`, { method: 'DELETE' });
+          if (res.ok) {
+            Swal.fire('已刪除！', '您的案件已被刪除。', 'success');
+            fetchCases(); // Refresh list
+          } else {
+            const data = await res.json();
+            throw new Error(data.message || '刪除失敗');
+          }
+        } catch (error) {
+          Swal.fire('刪除失敗！', error.message, 'error');
+        }
+      }
+    });
   };
 
   const renderPagination = () => {
@@ -241,12 +285,13 @@ const CaseList = () => {
               <th>數量</th>
               <th>檢驗員</th>
               <th>缺陷分類</th>
+              <th>操作</th>
             </tr>
           </thead>
           <tbody>
             {cases.length === 0 ? (
               <tr>
-                <td colSpan="9" className="text-center">
+                <td colSpan="10" className="text-center">
                   無資料
                 </td>
               </tr>
@@ -264,6 +309,23 @@ const CaseList = () => {
                   <td>{item.quantity}</td>
                   <td>{item.inspector}</td>
                   <td>{item.defectCategory}</td>
+                  <td>
+                    <Button
+                      variant="outline-primary"
+                      size="sm"
+                      className="me-2"
+                      onClick={() => handleShowModal(item)}
+                    >
+                      編輯
+                    </Button>
+                    <Button
+                      variant="outline-danger"
+                      size="sm"
+                      onClick={() => handleDelete(item._id)}
+                    >
+                      刪除
+                    </Button>
+                  </td>
                 </tr>
               ))
             )}
@@ -275,7 +337,7 @@ const CaseList = () => {
 
       <Modal show={showModal} onHide={handleCloseModal} size="lg">
         <Modal.Header closeButton>
-          <Modal.Title>新增案件</Modal.Title>
+          <Modal.Title>{editingCaseId ? '編輯案件' : '新增案件'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
@@ -526,6 +588,8 @@ const CaseList = () => {
                     role="status"
                     aria-hidden="true"
                   />
+                ) : editingCaseId ? (
+                  '儲存變更'
                 ) : (
                   '新增'
                 )}
