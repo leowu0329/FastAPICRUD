@@ -52,12 +52,16 @@ const CaseList = () => {
   const [form, setForm] = useState(initialState);
   const [formLoading, setFormLoading] = useState(false);
   const [editingCaseId, setEditingCaseId] = useState(null);
+  const [sortField, setSortField] = useState('date');
+  const [sortOrder, setSortOrder] = useState('desc');
 
   const fetchCases = async () => {
     setLoading(true);
     const params = new URLSearchParams({
       page,
       limit: PAGE_SIZE,
+      sortField,
+      sortOrder,
     });
 
     if (filters.inspectionType)
@@ -91,22 +95,7 @@ const CaseList = () => {
   useEffect(() => {
     fetchCases();
     // eslint-disable-next-line
-  }, [page]);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      if (page !== 1) {
-        setPage(1);
-      } else {
-        fetchCases();
-      }
-    }, 500); // 500ms debounce
-
-    return () => {
-      clearTimeout(handler);
-    };
-    // eslint-disable-next-line
-  }, [filters]);
+  }, [page, sortField, sortOrder, filters]);
 
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -216,6 +205,24 @@ const CaseList = () => {
     return <Pagination>{items}</Pagination>;
   };
 
+  // 點擊日期欄位切換排序
+  const handleSortDate = () => {
+    if (sortField === 'date') {
+      if (page !== 1) {
+        setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+        setPage(1);
+      } else {
+        setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+      }
+    } else {
+      setSortField('date');
+      setSortOrder('desc');
+      if (page !== 1) {
+        setPage(1);
+      }
+    }
+  };
+
   return (
     <Container fluid className="my-4">
       <Row className="mb-3">
@@ -286,7 +293,17 @@ const CaseList = () => {
               <th>檢驗類型</th>
               <th>市場類型</th>
               <th>部門</th>
-              <th>日期</th>
+              <th
+                style={{ cursor: 'pointer', userSelect: 'none' }}
+                onClick={handleSortDate}
+              >
+                日期
+                {sortField === 'date'
+                  ? sortOrder === 'asc'
+                    ? ' ▲'
+                    : ' ▼'
+                  : ' ▼'}
+              </th>
               <th>產品編號</th>
               <th>產品名稱</th>
               <th>數量</th>

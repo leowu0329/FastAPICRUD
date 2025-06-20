@@ -13,7 +13,14 @@ router.get(
   validateRequest(caseValidations.list),
   async (req, res, next) => {
     try {
-      const { page = 1, limit = 10, search, ...filters } = req.query;
+      const {
+        page = 1,
+        limit = 10,
+        search,
+        sortField,
+        sortOrder,
+        ...filters
+      } = req.query;
       const skip = (page - 1) * limit;
 
       // 構建查詢條件
@@ -38,10 +45,16 @@ router.get(
         if (filters.endDate) query.date.$lte = new Date(filters.endDate);
       }
 
+      // 排序條件
+      let sortOption = { createdAt: -1 };
+      if (sortField) {
+        sortOption = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
+      }
+
       const cases = await Case.find(query)
         .skip(skip)
         .limit(parseInt(limit))
-        .sort({ createdAt: -1 });
+        .sort(sortOption);
 
       const total = await Case.countDocuments(query);
 
