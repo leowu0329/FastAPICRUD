@@ -7,6 +7,11 @@ requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.115.13",
     "jinja2>=3.1.6",
+    "motor>=3.7.1",
+    "pydantic>=2.11.7",
+    "pydantic-settings>=2.9.1",
+    "pymongo>=4.13.2",
+    "python-dotenv>=1.1.0",
     "python-multipart>=0.0.20",
     "sqlalchemy>=2.0.41",
     "uvicorn>=0.34.3",

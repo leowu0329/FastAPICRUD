@@ -1,31 +1,40 @@
-from sqlalchemy.orm import Session
-from . import models, schemas
+from .models import ItemModel
+from .database import mongodb
+from bson import ObjectId
 
-def get_items(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Item).offset(skip).limit(limit).all()
+class ItemCRUD:
+    async def get_items(self, skip: int = 0, limit: int = 100):
+        items = []
+        async for item in mongodb.db.items.find().skip(skip).limit(limit):
+            item["_id"] = str(item["_id"])  # 轉換 ObjectId 為字符串
+            items.append(ItemModel(**item))
+        return items
 
-def get_item(db: Session, item_id: int):
-    return db.query(models.Item).filter(models.Item.id == item_id).first()
+    async def get_item(self, item_id: str):
+        item = await mongodb.db.items.find_one({"_id": ObjectId(item_id)})
+        if item:
+            item["_id"] = str(item["_id"])  # 轉換 ObjectId 為字符串
+            return ItemModel(**item)
+        return None
 
-def create_item(db: Session, item: schemas.ItemCreate):
-    db_item = models.Item(**item.model_dump())
-    db.add(db_item)
-    db.commit()
-    db.refresh(db_item)
-    return db_item
+    async def create_item(self, item: ItemModel):
+        item_dict = item.model_dump(by_alias=True, exclude={"id"})
+        result = await mongodb.db.items.insert_one(item_dict)
+        created_item = await self.get_item(str(result.inserted_id))
+        return created_item
 
-def update_item(db: Session, item_id: int, item: schemas.ItemCreate):
-    db_item = db.query(models.Item).filter(models.Item.id == item_id).first()
-    if db_item:
-        db_item.name = item.name
-        db_item.description = item.description
-        db.commit()
-        db.refresh(db_item)
-    return db_item
+    async def update_item(self, item_id: str, item: ItemModel):
+        item_dict = item.model_dump(by_alias=True, exclude={"id"})
+        await mongodb.db.items.update_one(
+            {"_id": ObjectId(item_id)},
+            {"$set": item_dict}
+        )
+        return await self.get_item(item_id)
 
-def delete_item(db: Session, item_id: int):
-    db_item = db.query(models.Item).filter(models.Item.id == item_id).first()
-    if db_item:
-        db.delete(db_item)
-        db.commit()
-    return db_item
+    async def delete_item(self, item_id: str):
+        item = await self.get_item(item_id)
+        if item:
+            await mongodb.db.items.delete_one({"_id": ObjectId(item_id)})
+        return item
+
+item_crud = ItemCRUD()

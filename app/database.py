@@ -1,12 +1,19 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from motor.motor_asyncio import AsyncIOMotorClient
+from .config import settings
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
+class MongoDB:
+    def __init__(self):
+        self.client = None
+        self.db = None
 
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    async def connect(self):
+        self.client = AsyncIOMotorClient(settings.mongodb_url)
+        self.db = self.client[settings.mongodb_dbname]
+        print("Connected to MongoDB Atlas")
 
-Base = declarative_base()
+    async def close(self):
+        if self.client:
+            self.client.close()
+            print("Disconnected from MongoDB Atlas")
+
+mongodb = MongoDB()
