@@ -83,14 +83,14 @@ app.use(
   }),
 );
 
+// 解析 JSON 請求體
+app.use(express.json());
+
 // 測試路由
 app.get('/', (req, res) => {
   logger.info('Test endpoint accessed');
   res.send('backend Test OK');
 });
-
-// 解析 JSON 請求體
-app.use(express.json());
 
 // 限制請求速率
 const limiter = rateLimit({
