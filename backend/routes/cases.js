@@ -156,4 +156,66 @@ router.delete(
   },
 );
 
+// 批次產生隨機案件
+router.post('/random', async (req, res, next) => {
+  try {
+    const inspectionTypes = ['首件', '巡檢'];
+    const marketTypes = ['內銷', '外銷'];
+    const departments = ['塑膠射出課', '射出加工組', '機械加工課'];
+    const inspectors = [
+      '',
+      '吳小男',
+      '謝小宸',
+      '黃小瀅',
+      '蔡小函',
+      '徐小棉',
+      '杜小綾',
+    ];
+    const defectCategories = [
+      '',
+      '無圖面',
+      '圖物不符',
+      '無工單',
+      '無檢驗表單',
+      '尺寸NG',
+      '外觀NG',
+    ];
+    const randomStr = (len = 6) =>
+      Math.random()
+        .toString(36)
+        .substring(2, 2 + len)
+        .toUpperCase();
+    const randomInt = (min, max) =>
+      Math.floor(Math.random() * (max - min + 1)) + min;
+    const today = new Date();
+
+    const cases = Array.from({ length: 20 }).map(() => ({
+      inspectionType: inspectionTypes[randomInt(0, 1)],
+      marketType: marketTypes[randomInt(0, 1)],
+      customer: '客戶' + randomStr(2),
+      department: departments[randomInt(0, 2)],
+      date: new Date(today.getTime() - randomInt(0, 30) * 24 * 60 * 60 * 1000),
+      time: `${randomInt(8, 18)}:${randomInt(0, 59)
+        .toString()
+        .padStart(2, '0')}`,
+      workOrder: 'WO' + randomStr(4),
+      operator: '操作員' + randomStr(2),
+      drawingVersion: 'V' + randomInt(1, 5),
+      productNumber: 'PN' + randomStr(4),
+      productName: '產品' + randomStr(3),
+      quantity: randomInt(1, 1000),
+      inspector: inspectors[randomInt(0, inspectors.length - 1)],
+      defectCategory:
+        defectCategories[randomInt(0, defectCategories.length - 1)],
+      defectDescription: randomStr(10),
+      solution: randomStr(8),
+      inspectionHours: parseFloat((Math.random() * 8).toFixed(2)),
+    }));
+    const result = await Case.insertMany(cases);
+    res.json({ status: 'success', count: result.length });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

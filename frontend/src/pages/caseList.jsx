@@ -54,6 +54,7 @@ const CaseList = () => {
   const [editingCaseId, setEditingCaseId] = useState(null);
   const [sortField, setSortField] = useState('date');
   const [sortOrder, setSortOrder] = useState('desc');
+  const [randomLoading, setRandomLoading] = useState(false);
 
   const fetchCases = async () => {
     setLoading(true);
@@ -223,6 +224,30 @@ const CaseList = () => {
     }
   };
 
+  // 新增隨機20筆資料
+  const handleAddRandom = async () => {
+    setRandomLoading(true);
+    try {
+      const res = await fetch('/api/cases/random', { method: 'POST' });
+      const data = await res.json();
+      if (res.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: `已新增${data.count}筆隨機資料`,
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        fetchCases();
+      } else {
+        throw new Error(data.message || '新增失敗');
+      }
+    } catch (err) {
+      Swal.fire({ icon: 'error', title: '新增失敗', text: err.message });
+    } finally {
+      setRandomLoading(false);
+    }
+  };
+
   return (
     <Container fluid className="my-4">
       <Row className="mb-3">
@@ -230,7 +255,16 @@ const CaseList = () => {
           <h2>案件列表</h2>
         </Col>
         <Col className="text-end">
-          <Button onClick={() => handleShowModal()}>新增案件</Button>
+          <Button onClick={() => handleShowModal()} className="me-2">
+            新增案件
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleAddRandom}
+            disabled={randomLoading}
+          >
+            {randomLoading ? '產生中...' : '新增隨機20筆資料'}
+          </Button>
         </Col>
       </Row>
 
