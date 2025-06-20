@@ -83,9 +83,6 @@ app.use(
   }),
 );
 
-// 解析 JSON 請求體
-app.use(express.json());
-
 // 測試路由
 app.get('/', (req, res) => {
   logger.info('Test endpoint accessed');
@@ -132,7 +129,10 @@ app.use((err, req, res, next) => {
       req.method
     } - ${req.ip}`,
   );
-  errorHandler(err, req, res, next);
+  res.status(err.status || 500).json({
+    status: 'error',
+    message: err.message || 'Internal Server Error',
+  });
 });
 
 module.exports = app;
