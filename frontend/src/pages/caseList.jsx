@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Container,
   Table,
@@ -304,7 +305,9 @@ const CaseList = () => {
                   <td>
                     {item.date ? new Date(item.date).toLocaleDateString() : ''}
                   </td>
-                  <td>{item.productNumber}</td>
+                  <td>
+                    <Link to={`/cases/${item._id}`}>{item.productNumber}</Link>
+                  </td>
                   <td>{item.productName}</td>
                   <td>{item.quantity}</td>
                   <td>{item.inspector}</td>
