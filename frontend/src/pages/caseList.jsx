@@ -47,6 +47,7 @@ const CaseList = () => {
   const [filters, setFilters] = useState(FILTERS);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState(initialState);
@@ -77,6 +78,7 @@ const CaseList = () => {
       if (res.ok) {
         setCases(data.data || []);
         setTotalPages(data.pagination?.pages || 1);
+        setTotalCount(data.pagination?.total || 0);
       } else {
         throw new Error(data.message || 'Failed to fetch cases');
       }
@@ -393,7 +395,17 @@ const CaseList = () => {
         </Table>
       )}
 
-      <div className="d-flex justify-content-center">{renderPagination()}</div>
+      <div className="d-flex justify-content-center align-items-center flex-wrap gap-2">
+        {renderPagination()}
+        <div className="ms-3 text-secondary">
+          {totalCount > 0 && (
+            <span>
+              第 {(page - 1) * PAGE_SIZE + 1}~
+              {Math.min(page * PAGE_SIZE, totalCount)} 筆，共 {totalCount} 筆
+            </span>
+          )}
+        </div>
+      </div>
 
       <Modal show={showModal} onHide={handleCloseModal} size="lg">
         <Modal.Header closeButton>
