@@ -1575,3 +1575,5 @@
 {"level":"info","message":"::1 - GET /api/cases?page=1&limit=10&sortField=date&sortOrder=desc 200 69.86 ms - 5421 - {}","timestamp":"2025-06-20T11:03:51.887Z"}
 {"level":"info","message":"Server is running on http://localhost:5000","timestamp":"2025-06-20T11:08:59.804Z"}
 {"level":"info","message":"Server is running on http://localhost:5000","timestamp":"2025-06-20T11:09:09.466Z"}
+{"level":"info","message":"Server is running on http://localhost:5000","timestamp":"2025-06-20T11:09:20.564Z"}
+{"level":"info","message":"Server is running on http://localhost:5000","timestamp":"2025-06-20T11:15:41.649Z"}

@@ -129,6 +129,9 @@ app.use((err, req, res, next) => {
       req.method
     } - ${req.ip}`,
   );
+  if (res.headersSent) {
+    return next(err);
+  }
   res.status(err.status || 500).json({
     status: 'error',
     message: err.message || 'Internal Server Error',
