@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import CaseRand20 from './caseRand20';
 
 const MyNavbar = ({ onAddCase, onAddRandom, randomLoading }) => {
   return (
@@ -15,13 +16,7 @@ const MyNavbar = ({ onAddCase, onAddRandom, randomLoading }) => {
             <Button variant="primary" className="me-2" onClick={onAddCase}>
               新增案件
             </Button>
-            <Button
-              variant="secondary"
-              onClick={onAddRandom}
-              disabled={randomLoading}
-            >
-              {randomLoading ? '產生中...' : '新增隨機20筆資料'}
-            </Button>
+            <CaseRand20 onAddRandom={onAddRandom} loading={randomLoading} />
           </Nav>
         </Navbar.Collapse>
       </Container>

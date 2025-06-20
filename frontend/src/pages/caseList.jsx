@@ -11,6 +11,9 @@ import {
   Spinner,
 } from 'react-bootstrap';
 import Swal from 'sweetalert2';
+import CaseSearch from '../components/caseSearch';
+import CaseFilter from '../components/caseFilter';
+import CasePagination from '../components/casePagination';
 
 const FILTERS = {
   inspectionType: '',
@@ -147,48 +150,9 @@ const CaseList = ({ reloadKey, onEditCase }) => {
       <div className="mb-3 p-3 border rounded">
         <Row className="g-3">
           <Col md={3}>
-            <Form.Control
-              type="text"
-              name="search"
-              placeholder="搜尋關鍵字..."
-              value={filters.search}
-              onChange={handleFilterChange}
-            />
+            <CaseSearch value={filters.search} onChange={handleFilterChange} />
           </Col>
-          <Col md={3}>
-            <Form.Select
-              name="inspectionType"
-              value={filters.inspectionType}
-              onChange={handleFilterChange}
-            >
-              <option value="">全部檢驗類型</option>
-              <option value="首件">首件</option>
-              <option value="巡檢">巡檢</option>
-            </Form.Select>
-          </Col>
-          <Col md={3}>
-            <Form.Select
-              name="marketType"
-              value={filters.marketType}
-              onChange={handleFilterChange}
-            >
-              <option value="">全部市場類型</option>
-              <option value="內銷">內銷</option>
-              <option value="外銷">外銷</option>
-            </Form.Select>
-          </Col>
-          <Col md={3}>
-            <Form.Select
-              name="department"
-              value={filters.department}
-              onChange={handleFilterChange}
-            >
-              <option value="">全部部門</option>
-              <option value="塑膠射出課">塑膠射出課</option>
-              <option value="射出加工組">射出加工組</option>
-              <option value="機械加工課">機械加工課</option>
-            </Form.Select>
-          </Col>
+          <CaseFilter filters={filters} onChange={handleFilterChange} />
         </Row>
       </div>
 
@@ -271,32 +235,16 @@ const CaseList = ({ reloadKey, onEditCase }) => {
         </Table>
       )}
 
-      <div className="d-flex justify-content-center align-items-center flex-wrap gap-2">
-        <Form.Select
-          style={{ width: 100 }}
-          className="me-2"
-          value={pageSize}
-          onChange={(e) => {
-            setPageSize(Number(e.target.value));
-            setPage(1);
-          }}
-        >
-          {PAGE_SIZE_OPTIONS.map((opt) => (
-            <option key={opt} value={opt}>
-              每頁{opt}筆
-            </option>
-          ))}
-        </Form.Select>
-        {renderPagination()}
-        <div className="ms-3 text-secondary">
-          {totalCount > 0 && (
-            <span>
-              第 {(page - 1) * pageSize + 1}~
-              {Math.min(page * pageSize, totalCount)} 筆，共 {totalCount} 筆
-            </span>
-          )}
-        </div>
-      </div>
+      <CasePagination
+        page={page}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        setPage={setPage}
+        setPageSize={setPageSize}
+        totalCount={totalCount}
+        PAGE_SIZE_OPTIONS={PAGE_SIZE_OPTIONS}
+        renderPagination={renderPagination}
+      />
     </Container>
   );
 };
