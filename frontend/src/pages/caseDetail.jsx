@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { Container, Card, Button, Spinner, Alert } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const CaseDetail = () => {
   const { id } = useParams();
   const [caseDetail, setCaseDetail] = useState(null);
@@ -14,7 +16,7 @@ const CaseDetail = () => {
       setLoading(true);
       setError('');
       try {
-        const res = await fetch(`/api/cases/${id}`);
+        const res = await fetch(`${API_URL}/api/cases/${id}`);
         const data = await res.json();
         if (res.ok) {
           setCaseDetail(data.data);

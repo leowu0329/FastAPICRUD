@@ -15,6 +15,8 @@ import CaseSearch from '../components/caseSearch';
 import CaseFilter from '../components/caseFilter';
 import CasePagination from '../components/casePagination';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const FILTERS = {
   inspectionType: '',
   marketType: '',
@@ -51,7 +53,7 @@ const CaseList = ({ reloadKey, onEditCase }) => {
     if (filters.search) params.append('search', filters.search);
 
     try {
-      const res = await fetch(`/api/cases?${params.toString()}`);
+      const res = await fetch(`${API_URL}/api/cases?${params.toString()}`);
       const data = await res.json();
       if (res.ok) {
         setCases(data.data || []);
@@ -95,7 +97,9 @@ const CaseList = ({ reloadKey, onEditCase }) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await fetch(`/api/cases/${caseId}`, { method: 'DELETE' });
+          const res = await fetch(`${API_URL}/api/cases/${caseId}`, {
+            method: 'DELETE',
+          });
           if (res.ok) {
             Swal.fire('已刪除！', '您的案件已被刪除。', 'success');
             fetchCases(); // Refresh list
