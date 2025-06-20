@@ -1,0 +1,4 @@
+{"level":"error","message":"fail - 找不到路徑: /nonexistent - /nonexistent - GET - ::1","timestamp":"2025-06-14T18:42:19.188Z"}
+{"level":"error","message":"fail - 檢驗類型必須是首件或巡檢, 市場類型必須是內銷或外銷, 部門選擇無效, 日期格式無效 - /api/cases - POST - ::1","timestamp":"2025-06-14T18:45:12.654Z"}
+{"level":"error","message":"fail - 日期格式無效 - /api/cases - POST - ::1","timestamp":"2025-06-14T18:46:15.767Z"}
+{"level":"error","message":"fail - 找不到路徑: /nonexistent - /nonexistent - GET - ::1","timestamp":"2025-06-14T18:47:47.962Z"}

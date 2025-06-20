@@ -1,0 +1,31 @@
+:root {
+  --font-noto: 'Noto Sans TC', sans-serif;
+  --font-roboto: 'Roboto', sans-serif;
+}
+
+body {
+  font-family: var(--font-noto);
+}
+
+.roboto {
+  font-family: var(--font-roboto);
+}
+
+.font-weight-regular {
+  font-weight: 400;
+}
+
+.font-weight-medium {
+  font-weight: 500;
+}
+
+.font-weight-bold {
+  font-weight: 700;
+}
+
+.text-gradient {
+  background: linear-gradient(45deg, #646cff, #61dafb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
