@@ -40,7 +40,7 @@ const initialState = {
   inspectionHours: 0,
 };
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
 const CaseList = () => {
   const [cases, setCases] = useState([]);
@@ -56,12 +56,13 @@ const CaseList = () => {
   const [sortField, setSortField] = useState('date');
   const [sortOrder, setSortOrder] = useState('desc');
   const [randomLoading, setRandomLoading] = useState(false);
+  const [pageSize, setPageSize] = useState(PAGE_SIZE_OPTIONS[0]);
 
   const fetchCases = async () => {
     setLoading(true);
     const params = new URLSearchParams({
       page,
-      limit: PAGE_SIZE,
+      limit: pageSize,
       sortField,
       sortOrder,
     });
@@ -98,7 +99,7 @@ const CaseList = () => {
   useEffect(() => {
     fetchCases();
     // eslint-disable-next-line
-  }, [page, sortField, sortOrder, filters]);
+  }, [page, sortField, sortOrder, filters, pageSize]);
 
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -396,12 +397,27 @@ const CaseList = () => {
       )}
 
       <div className="d-flex justify-content-center align-items-center flex-wrap gap-2">
+        <Form.Select
+          style={{ width: 100 }}
+          className="me-2"
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+            setPage(1);
+          }}
+        >
+          {PAGE_SIZE_OPTIONS.map((opt) => (
+            <option key={opt} value={opt}>
+              每頁{opt}筆
+            </option>
+          ))}
+        </Form.Select>
         {renderPagination()}
         <div className="ms-3 text-secondary">
           {totalCount > 0 && (
             <span>
-              第 {(page - 1) * PAGE_SIZE + 1}~
-              {Math.min(page * PAGE_SIZE, totalCount)} 筆，共 {totalCount} 筆
+              第 {(page - 1) * pageSize + 1}~
+              {Math.min(page * pageSize, totalCount)} 筆，共 {totalCount} 筆
             </span>
           )}
         </div>
