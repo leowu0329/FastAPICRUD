@@ -1247,3 +1247,20 @@
 {"level":"info","message":"Test endpoint accessed","timestamp":"2025-06-15T00:42:24.927Z"}
 {"level":"info","message":"::ffff:127.0.0.1 - GET / 200 33.96 ms - 15 - -","timestamp":"2025-06-15T00:42:24.961Z"}
 {"level":"info","message":"Server is running on http://localhost:5000","timestamp":"2025-06-20T02:21:11.283Z"}
+{"level":"info","message":"Server is running on http://localhost:5000","timestamp":"2025-06-20T03:10:43.795Z"}
+{"level":"info","message":"Server is running on http://localhost:5000","timestamp":"2025-06-20T03:28:36.049Z"}
+{"level":"info","message":"::1 - POST /api/cases 201 110.47 ms - 530 - {\"inspectionType\":\"首件\",\"marketType\":\"內銷\",\"customer\":\"CSB\",\"department\":\"塑膠射出課\",\"date\":\"2025-06-05\",\"time\":\"11:29\",\"workOrder\":\"5341-2025010032\",\"operator\":\"dd\",\"drawingVersion\":\"3\",\"productNumber\":\"5341-2025010032\",\"productName\":\"55dd\",\"quantity\":\"12\",\"inspector\":\"吳小男\",\"defectCategory\":\"\",\"defectDescription\":\"\",\"solution\":\"\",\"inspectionHours\":\"1\"}","timestamp":"2025-06-20T03:29:08.672Z"}
+{"level":"error","message":"fail - 檢驗類型必須是首件或巡檢, 市場類型必須是內銷或外銷 - /api/cases?page=1&limit=10&inspectionType=&marketType=&department= - GET - ::1","timestamp":"2025-06-20T03:29:08.796Z"}
+{"level":"info","message":"::1 - GET /api/cases?page=1&limit=10&inspectionType=&marketType=&department= 400 15.67 ms - 104 - {}","timestamp":"2025-06-20T03:29:08.800Z"}
+{"level":"error","message":"fail - 檢驗類型必須是首件或巡檢, 市場類型必須是內銷或外銷 - /api/cases?page=1&limit=10&inspectionType=&marketType=&department= - GET - ::1","timestamp":"2025-06-20T03:29:08.826Z"}
+{"level":"info","message":"::1 - GET /api/cases?page=1&limit=10&inspectionType=&marketType=&department= 400 18.28 ms - 104 - {}","timestamp":"2025-06-20T03:29:08.841Z"}
+{"level":"info","message":"::1 - GET /api/cases?page=1&limit=10 200 97.31 ms - 587 - {}","timestamp":"2025-06-20T03:31:18.554Z"}
+{"level":"info","message":"::1 - GET /api/cases?page=1&limit=10 304 96.26 ms - - - {}","timestamp":"2025-06-20T03:31:18.659Z"}
+{"level":"info","message":"::1 - GET /api/cases?page=1&limit=10 304 122.03 ms - - - {}","timestamp":"2025-06-20T03:35:19.995Z"}
+{"level":"info","message":"::1 - GET /api/cases?page=1&limit=10 304 161.44 ms - - - {}","timestamp":"2025-06-20T03:35:20.183Z"}
+{"level":"info","message":"::1 - GET /api/cases?page=1&limit=10 304 137.60 ms - - - {}","timestamp":"2025-06-20T03:36:43.834Z"}
+{"level":"info","message":"::1 - GET /api/cases?page=1&limit=10 304 103.29 ms - - - {}","timestamp":"2025-06-20T03:36:43.947Z"}
+{"level":"info","message":"::1 - GET /api/cases?page=1&limit=10 304 63.47 ms - - - {}","timestamp":"2025-06-20T03:37:23.774Z"}
+{"level":"info","message":"::1 - GET /api/cases?page=1&limit=10 304 64.24 ms - - - {}","timestamp":"2025-06-20T03:37:23.866Z"}
+{"level":"info","message":"::1 - POST /api/cases 201 44.78 ms - 555 - {\"inspectionType\":\"首件\",\"marketType\":\"外銷\",\"customer\":\"CSBdd\",\"department\":\"射出加工組\",\"date\":\"2025-06-12\",\"time\":\"11:39\",\"workOrder\":\"5341-2025010032\",\"operator\":\"黃小明\",\"drawingVersion\":\"3\",\"productNumber\":\"5341-2025010032\",\"productName\":\"ryowu\",\"quantity\":\"44\",\"inspector\":\"徐小棉\",\"defectCategory\":\"無檢驗表單\",\"defectDescription\":\"\",\"solution\":\"\",\"inspectionHours\":\"1\"}","timestamp":"2025-06-20T03:38:04.178Z"}
+{"level":"info","message":"::1 - GET /api/cases?page=1&limit=10 200 60.11 ms - 1115 - {}","timestamp":"2025-06-20T03:38:04.399Z"}
